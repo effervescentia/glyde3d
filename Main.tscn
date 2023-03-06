@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://racr7clp20md"]
+[gd_scene load_steps=9 format=3 uid="uid://caaajtnxxqr0a"]
 
 [ext_resource type="Texture2D" uid="uid://b5olci3i7jdlj" path="res://art/brick.png" id="1_jn4d4"]
 [ext_resource type="PackedScene" uid="uid://bn6j0ib8g0cxt" path="res://Player.tscn" id="1_sfkx3"]
 [ext_resource type="Script" path="res://RotationLabel.gd" id="3_l1q8v"]
 [ext_resource type="Script" path="res://SpeedLabel.gd" id="4_oh7x2"]
+[ext_resource type="Script" path="res://ChargeLabel.gd" id="5_ura2y"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_v157o"]
 size = Vector3(60, 2, 60)
@@ -63,5 +64,15 @@ offset_bottom = 92.0
 text = "Speed: 0"
 script = ExtResource("4_oh7x2")
 
+[node name="ChargeLabel" type="Label" parent="UI"]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 92.0
+offset_right = 107.0
+offset_bottom = 118.0
+text = "Charge: 0"
+script = ExtResource("5_ura2y")
+
+[connection signal="charge_changed" from="Player" to="UI/ChargeLabel" method="_on_player_charge_changed"]
 [connection signal="rotation_changed" from="Player" to="UI/RotationLabel" method="_on_player_rotation_changed"]
 [connection signal="speed_changed" from="Player" to="UI/SpeedLabel" method="_on_player_speed_changed"]
