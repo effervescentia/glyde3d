@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://bn6j0ib8g0cxt"]
+
+[ext_resource type="Script" path="res://Player.gd" id="1_t4gmu"]
+[ext_resource type="PackedScene" uid="uid://b6lqqnl8u4gc7" path="res://Disk.tscn" id="2_m1254"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_wn2or"]
+height = 0.45
+radius = 0.6
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_t4gmu")
+
+[node name="Pivot" type="Node3D" parent="."]
+
+[node name="Character" parent="Pivot" instance=ExtResource("2_m1254")]
+
+[node name="CollisionShape" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_wn2or")

@@ -1,0 +1,67 @@
+[gd_scene load_steps=8 format=3 uid="uid://racr7clp20md"]
+
+[ext_resource type="Texture2D" uid="uid://b5olci3i7jdlj" path="res://art/brick.png" id="1_jn4d4"]
+[ext_resource type="PackedScene" uid="uid://bn6j0ib8g0cxt" path="res://Player.tscn" id="1_sfkx3"]
+[ext_resource type="Script" path="res://RotationLabel.gd" id="3_l1q8v"]
+[ext_resource type="Script" path="res://SpeedLabel.gd" id="4_oh7x2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v157o"]
+size = Vector3(60, 2, 60)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2mqi4"]
+albedo_texture = ExtResource("1_jn4d4")
+
+[sub_resource type="BoxMesh" id="BoxMesh_yccme"]
+size = Vector3(60, 2, 60)
+
+[node name="Main" type="Node"]
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="CollisionShape" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_v157o")
+
+[node name="MeshInstance" type="MeshInstance3D" parent="Ground"]
+material_override = SubResource("StandardMaterial3D_2mqi4")
+mesh = SubResource("BoxMesh_yccme")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.770636, 0.594633, 0.229199, -1.57718e-17, -0.359655, 0.933085, 0.637276, -0.719069, -0.277163, 0, 33.0044, 0)
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("1_sfkx3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.3, 2.08165e-12)
+
+[node name="CameraPivot" type="Marker3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 0.851892, 0.523718, 0, -0.523718, 0.851892, 2.08165e-12, 2.90004, 3.87374)
+
+[node name="Camera" type="Camera3D" parent="Player/CameraPivot"]
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="RotationLabel" type="Label" parent="UI"]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 124.0
+offset_bottom = 66.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Rotation: 0"
+script = ExtResource("3_l1q8v")
+
+[node name="SpeedLabel" type="Label" parent="UI"]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 66.0
+offset_right = 105.0
+offset_bottom = 92.0
+text = "Speed: 0"
+script = ExtResource("4_oh7x2")
+
+[connection signal="rotation_changed" from="Player" to="UI/RotationLabel" method="_on_player_rotation_changed"]
+[connection signal="speed_changed" from="Player" to="UI/SpeedLabel" method="_on_player_speed_changed"]
