@@ -28,19 +28,28 @@ var charge = 0.0
 var local_rotation = 0.0
 var local_velocity = Vector3.ZERO
 
+
 func accelerate(delta):
 	speed = move_toward(speed, max_speed, accel_factor * (charge * boost_factor + 1) * delta)
 	charge = move_toward(charge, 0, discharge_factor * delta)
-	
+
+
 func build_charge(delta):
 	speed = move_toward(speed, 0, braking_factor * delta)
 	charge = move_toward(charge, max_charge, (power * power_factor + 1) * delta)
+
 
 func turn(turn_axis, delta):
 	var prev_rotation = local_rotation
 	local_rotation = fmod(local_rotation + turn_axis * turning_factor * delta, deg_180)
 	local_rotation += 0 if local_rotation > 0 else deg_180
 	return local_rotation - prev_rotation
+
+
+func inc_power():
+	power += 1
+	emit_signal("power_changed", power)
+
 
 func _physics_process(delta):
 	var direction = Vector3.ZERO
@@ -53,7 +62,8 @@ func _physics_process(delta):
 	# turning
 	var turn_axis = Input.get_axis("vehicle_turn_right", "vehicle_turn_left")
 	var turn_offset = turn(turn_axis, delta) if turn_axis else 0
-		
+	
+	# signals
 	emit_signal("speed_changed", speed)
 	emit_signal("rotation_changed", local_rotation)
 	emit_signal("charge_changed", charge)
@@ -63,18 +73,16 @@ func _physics_process(delta):
 	move_and_slide()
 	rotate_y(turn_offset)
 	
+	# check for collisions
 	for index in range(get_slide_collision_count()):
 		var collision = get_slide_collision(index)
-		
-		if (collision.get_collider() == null):
-			continue
-			
 		var collider = collision.get_collider()
+		
+		if (collider == null):
+			continue
+		
+		# powerups
 		if collider.is_in_group("powerup"):
 			var powerup = collider
-			powerup.collect()
-				
-	
-func _on_powerup_collected():
-	power += 1
-	emit_signal("power_changed", power)
+			powerup.collect(self)
+

@@ -20,6 +20,5 @@ func add_powerup():
 	var rnd_r = rng.randf_range(0, 360)
 
 	powerup.initialize(Vector3(rnd_x, 0.7, rnd_z), rnd_r)
-	powerup.powerup_collected.connect($Player._on_powerup_collected.bind())
 	
 	add_child(powerup)
