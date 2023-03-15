@@ -1,10 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://caaajtnxxqr0a"]
+[gd_scene load_steps=12 format=3 uid="uid://caaajtnxxqr0a"]
 
+[ext_resource type="Script" path="res://Main.gd" id="1_87ohq"]
 [ext_resource type="Texture2D" uid="uid://b5olci3i7jdlj" path="res://art/brick.png" id="1_jn4d4"]
-[ext_resource type="PackedScene" uid="uid://bn6j0ib8g0cxt" path="res://Player.tscn" id="1_sfkx3"]
+[ext_resource type="PackedScene" uid="uid://dewaycbkh128i" path="res://Player.tscn" id="1_sfkx3"]
+[ext_resource type="PackedScene" uid="uid://ddd5rxqt4exf7" path="res://Powerup.tscn" id="2_i2usc"]
 [ext_resource type="Script" path="res://RotationLabel.gd" id="3_l1q8v"]
 [ext_resource type="Script" path="res://SpeedLabel.gd" id="4_oh7x2"]
 [ext_resource type="Script" path="res://ChargeLabel.gd" id="5_ura2y"]
+[ext_resource type="Script" path="res://PowerLabel.gd" id="8_f36g7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_v157o"]
 size = Vector3(60, 2, 60)
@@ -16,9 +19,13 @@ albedo_texture = ExtResource("1_jn4d4")
 size = Vector3(60, 2, 60)
 
 [node name="Main" type="Node"]
+script = ExtResource("1_87ohq")
+powerup_scene = ExtResource("2_i2usc")
 
 [node name="Ground" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+collision_layer = 4
+collision_mask = 0
 
 [node name="CollisionShape" type="CollisionShape3D" parent="Ground"]
 shape = SubResource("BoxShape3D_v157o")
@@ -73,6 +80,16 @@ offset_bottom = 118.0
 text = "Charge: 0"
 script = ExtResource("5_ura2y")
 
+[node name="PowerLabel" type="Label" parent="UI"]
+layout_mode = 0
+offset_left = 1900.0
+offset_top = 40.0
+offset_right = 1967.0
+offset_bottom = 66.0
+text = "Power: 0"
+script = ExtResource("8_f36g7")
+
 [connection signal="charge_changed" from="Player" to="UI/ChargeLabel" method="_on_player_charge_changed"]
+[connection signal="power_changed" from="Player" to="UI/PowerLabel" method="_on_player_power_changed"]
 [connection signal="rotation_changed" from="Player" to="UI/RotationLabel" method="_on_player_rotation_changed"]
 [connection signal="speed_changed" from="Player" to="UI/SpeedLabel" method="_on_player_speed_changed"]

@@ -1,0 +1,17 @@
+extends CharacterBody3D
+
+signal powerup_collected
+
+@export var spin_rate = 2
+
+func _physics_process(delta):
+	rotate_y(spin_rate * delta)
+
+func initialize(position, rotation):
+	self.position = position
+	self.rotation_degrees = Vector3(0, rotation, 0)
+
+func collect():
+	if not is_queued_for_deletion():
+		emit_signal("powerup_collected")
+		queue_free()

@@ -3,6 +3,7 @@ extends CharacterBody3D
 signal rotation_changed(r)
 signal speed_changed(s)
 signal charge_changed(c)
+signal power_changed(p)
 
 const deg_180 = 2 * PI
 
@@ -13,9 +14,10 @@ const deg_180 = 2 * PI
 # factors
 @export var accel_factor = 5
 @export var braking_factor = 45
-@export var turning_factor = 1
+@export var turning_factor = 2
 @export var discharge_factor = 5
-@export var boost_factor = 2
+@export var boost_factor = 10
+@export var power_factor = 0.1
 
 # abilities
 @export var power = 0
@@ -32,7 +34,7 @@ func accelerate(delta):
 	
 func build_charge(delta):
 	speed = move_toward(speed, 0, braking_factor * delta)
-	charge = move_toward(charge, max_charge, (power + 1) * delta)
+	charge = move_toward(charge, max_charge, (power * power_factor + 1) * delta)
 
 func turn(turn_axis, delta):
 	var prev_rotation = local_rotation
@@ -60,3 +62,19 @@ func _physics_process(delta):
 	velocity = (direction * speed).rotated(Vector3.UP, local_rotation)
 	move_and_slide()
 	rotate_y(turn_offset)
+	
+	for index in range(get_slide_collision_count()):
+		var collision = get_slide_collision(index)
+		
+		if (collision.get_collider() == null):
+			continue
+			
+		var collider = collision.get_collider()
+		if collider.is_in_group("powerup"):
+			var powerup = collider
+			powerup.collect()
+				
+	
+func _on_powerup_collected():
+	power += 1
+	emit_signal("power_changed", power)
