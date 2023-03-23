@@ -1,26 +1,74 @@
-[gd_scene load_steps=6 format=3 uid="uid://dewaycbkh128i"]
+[gd_scene load_steps=8 format=3 uid="uid://dewaycbkh128i"]
 
 [ext_resource type="Script" path="res://Player.gd" id="1_t4gmu"]
-[ext_resource type="PackedScene" uid="uid://msqub0j8g54f" path="res://art/disk.glb" id="2_01m1y"]
-[ext_resource type="Texture2D" uid="uid://25rqp1dhfu0s" path="res://art/planet.png" id="3_oqgd7"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_75nj8"]
-albedo_texture = ExtResource("3_oqgd7")
+[ext_resource type="Shader" uid="uid://bns4cxtwjynkj" path="res://Tire.tres" id="3_gwv8e"]
+[ext_resource type="PackedScene" uid="uid://xaon4enojnqq" path="res://art/dragonfly_bike.dae" id="4_k8ewt"]
+[ext_resource type="PackedScene" uid="uid://di6oovn4lpvar" path="res://art/dragonfly.dae" id="5_khmvi"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_wn2or"]
 height = 0.45
 radius = 0.6
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tba0j"]
+render_priority = 0
+shader = ExtResource("3_gwv8e")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7ukw8"]
+render_priority = 0
+shader = ExtResource("3_gwv8e")
+
 [node name="Player" type="CharacterBody3D"]
 collision_mask = 6
 script = ExtResource("1_t4gmu")
 
-[node name="Character" parent="." instance=ExtResource("2_01m1y")]
-
-[node name="Cylinder" parent="Character" index="0"]
-material_override = SubResource("StandardMaterial3D_75nj8")
-
 [node name="CollisionShape" type="CollisionShape3D" parent="."]
 shape = SubResource("CylinderShape3D_wn2or")
 
+[node name="Character" parent="." instance=ExtResource("5_khmvi")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
+visible = false
+
+[node name="back wheel" parent="Character/Group 1" index="1"]
+material_override = SubResource("ShaderMaterial_tba0j")
+
+[node name="front wheel" parent="Character/Group 1" index="3"]
+material_override = SubResource("ShaderMaterial_7ukw8")
+
+[node name="dragonfly_bike" parent="." instance=ExtResource("4_k8ewt")]
+transform = Transform3D(-0.5, 1.74393e-16, -4.37114e-08, -1.4241e-09, 0.499735, 0.0162898, 4.36882e-08, 0.0162898, -0.499735, 2.08165e-12, 0.935755, 2.08165e-12)
+
+[node name="seatold" parent="dragonfly_bike" index="0"]
+visible = false
+
+[node name="head" parent="dragonfly_bike" index="5"]
+visible = false
+
+[node name="wheelfront" parent="dragonfly_bike" index="6"]
+visible = false
+
+[node name="wheelrear" parent="dragonfly_bike" index="7"]
+visible = false
+
+[node name="body" parent="dragonfly_bike" index="8"]
+visible = false
+
+[node name="wheel" parent="dragonfly_bike" index="9"]
+visible = false
+
+[node name="referenceeye_front" parent="dragonfly_bike" index="10"]
+visible = false
+
+[node name="referenceeye_side" parent="dragonfly_bike" index="11"]
+visible = false
+
+[node name="referencemotorcycle_side" parent="dragonfly_bike" index="12"]
+visible = false
+
+[node name="reference_top" parent="dragonfly_bike" index="13"]
+visible = false
+
+[node name="reference_side" parent="dragonfly_bike" index="14"]
+visible = false
+
 [editable path="Character"]
+[editable path="dragonfly_bike"]

@@ -1,5 +1,6 @@
 extends Node
 
+const powerup_count = 20
 
 @export var powerup_scene: PackedScene
 
@@ -7,7 +8,7 @@ extends Node
 func _ready():
 	randomize()
 	
-	for n in range(10):
+	for n in range(powerup_count):
 		add_powerup()
 
 
